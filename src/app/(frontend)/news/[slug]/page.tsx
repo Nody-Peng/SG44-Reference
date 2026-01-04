@@ -1,13 +1,12 @@
-export const revalidate = 60 // 每 60 秒更新內容 (例如改錯字後，1分鐘後前台會變)
-export const dynamicParams = true // 允許訪問部署時還不存在的新文章
-
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { FileText, Mail, Phone, ChevronLeft } from 'lucide-react'
-// 如果您還沒安裝這個套件，終端機執行: pnpm add @payloadcms/richtext-lexical
-import { RichText } from '@payloadcms/richtext-lexical/react' 
+import { ChevronLeft, Calendar, FileText, Download, ExternalLink, Paperclip } from 'lucide-react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+
+export const revalidate = 60
+export const dynamicParams = true
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -24,66 +23,108 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   const news = result.docs[0]
 
   return (
-    <div className="min-h-screen bg-stone-50 py-12 px-4 sm:px-6">
+    <div className="min-h-screen bg-stone-50 pt-24 pb-12 px-4">
       <div className="max-w-3xl mx-auto">
-        <Link href="/#news" className="inline-flex items-center text-stone-500 hover:text-[#5F7161] mb-6 transition-colors">
+        <Link
+          href="/news"
+          className="inline-flex items-center text-stone-500 hover:text-[#5F7161] mb-6 transition-colors font-medium"
+        >
           <ChevronLeft className="w-4 h-4 mr-1" />
           返回列表
         </Link>
 
-        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-          <div className="border-b border-stone-100 px-8 py-6">
+        <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+          {/* Header */}
+          <div className="border-b border-stone-100 px-8 py-8 bg-white">
             <div className="flex items-center gap-3 mb-4">
               <span className="text-xs font-bold text-[#5F7161] bg-[#F0F4F1] px-2 py-1 rounded">
-                {news.category || '公告'}
+                {news.category}
               </span>
-              <span className="text-xs text-stone-400 font-mono">
+              <div className="flex items-center text-xs text-stone-400 font-mono">
+                <Calendar size={12} className="mr-1" />
                 {new Date(news.publishedDate).toLocaleDateString('zh-TW')}
-              </span>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-stone-900">
+            <h1 className="text-3xl md:text-4xl font-bold text-stone-900 leading-tight">
               {news.title}
             </h1>
           </div>
 
-          <div className="p-8">
-            <div className="prose prose-stone max-w-none text-stone-700 leading-relaxed">
-               {news.content && <RichText data={news.content} />}
+          {/* Content */}
+          <div className="p-8 md:p-10">
+            <div className="prose prose-stone prose-lg max-w-none text-stone-700">
+              {news.content && <RichText data={news.content} />}
             </div>
 
+            {/* 👇 新增：附件下載與相關連結區域 */}
+            {news.relatedFiles && news.relatedFiles.length > 0 && (
+              <div className="mt-12 p-6 bg-stone-50 rounded-xl border border-stone-200">
+                <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
+                  <Paperclip size={20} className="text-[#5F7161]" />
+                  相關附件與連結
+                </h3>
+                <ul className="space-y-3">
+                  {news.relatedFiles.map((item, index) => {
+                    // 判斷是檔案還是連結
+                    if (item.type === 'file' && item.file && typeof item.file === 'object') {
+                      // @ts-ignore: Payload type checking workaround
+                      const fileUrl = item.file.url
+                      return (
+                        <li key={index}>
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 bg-white rounded-lg border border-stone-200 hover:border-[#869D85] hover:shadow-sm transition-all group"
+                          >
+                            <div className="p-2 bg-[#F0F4F1] rounded text-[#5F7161]">
+                              <Download size={18} />
+                            </div>
+                            <span className="font-medium text-stone-700 group-hover:text-[#5F7161] transition-colors">
+                              {item.label}
+                            </span>
+                          </a>
+                        </li>
+                      )
+                    } else if (item.type === 'link' && item.url) {
+                      return (
+                        <li key={index}>
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 bg-white rounded-lg border border-stone-200 hover:border-[#869D85] hover:shadow-sm transition-all group"
+                          >
+                            <div className="p-2 bg-blue-50 rounded text-blue-600">
+                              <ExternalLink size={18} />
+                            </div>
+                            <span className="font-medium text-stone-700 group-hover:text-blue-700 transition-colors">
+                              {item.label}
+                            </span>
+                          </a>
+                        </li>
+                      )
+                    }
+                    return null
+                  })}
+                </ul>
+              </div>
+            )}
+
+            {/* 底部大按鈕 (Action Button) */}
             {news.actionLink && (
-              <div className="mt-10 p-6 bg-[#F8FAF9] rounded-lg border border-[#E2E8E4] flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-[#5F7161] rounded text-white">
-                    <FileText size={20} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-stone-800">
-                      相關連結 / 表單
-                    </p>
-                  </div>
-                </div>
+              <div className="mt-10 pt-8 border-t border-stone-100 flex justify-center md:justify-start">
                 <a
                   href={news.actionLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#5F7161] text-white px-8 py-2.5 rounded shadow-sm hover:bg-[#4a584b] transition-colors font-bold text-sm whitespace-nowrap"
+                  className="inline-flex items-center gap-2 bg-[#5F7161] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#4a584b] transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
+                  <FileText size={20} />
                   {news.actionText || '前往查看'}
                 </a>
               </div>
             )}
-          </div>
-
-          <div className="bg-stone-50 px-8 py-6 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-2 text-xs text-stone-500">
-              <Mail size={14} className="text-[#869D85]" />
-              <span>sg44@nccu.edu.tw</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-stone-500">
-              <Phone size={14} className="text-[#869D85]" />
-              <span>02-29393091 分機 50641</span>
-            </div>
           </div>
         </div>
       </div>

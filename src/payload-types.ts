@@ -181,10 +181,10 @@ export interface News {
   id: number;
   title: string;
   /**
-   * 這會變成網址的一部分，例如 /news/2025-signup
+   * 這會變成網址的一部分，例如 /news/call-for-papers
    */
   slug: string;
-  category: '公告' | '活動' | '新聞';
+  category: '重要公告' | '徵稿資訊' | '會議議程' | '註冊報名' | '榮譽榜單' | '一般消息';
   publishedDate: string;
   content: {
     root: {
@@ -202,7 +202,19 @@ export interface News {
     [k: string]: unknown;
   };
   /**
-   * 如果有填寫，文章底部會出現綠色的按鈕
+   * 可在此上傳 PDF、Word 檔或加入相關連結
+   */
+  relatedFiles?:
+    | {
+        type?: ('file' | 'link') | null;
+        label: string;
+        file?: (number | null) | Media;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * 適合放最重要的行動呼籲，如「前往報名表單」
    */
   actionLink?: string | null;
   actionText?: string | null;
@@ -380,6 +392,15 @@ export interface NewsSelect<T extends boolean = true> {
   category?: T;
   publishedDate?: T;
   content?: T;
+  relatedFiles?:
+    | T
+    | {
+        type?: T;
+        label?: T;
+        file?: T;
+        url?: T;
+        id?: T;
+      };
   actionLink?: T;
   actionText?: T;
   updatedAt?: T;
