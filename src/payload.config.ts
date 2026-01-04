@@ -16,6 +16,7 @@ import { Registrations } from './collections/Registrations' // ✨ 新增：報�
 // 2. 引入 Globals (全域設定)
 import { Contact } from './globals/Contact'
 import { Transport } from './globals/Transport' // ✨ 新增：交通
+import { Transport } from './globals/會場' // ✨ 新增：交通
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,21 +28,22 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  
+
   // 3. 註冊所有的 Collections
   collections: [
-    Users, 
-    Media, 
-    News, 
+    Users,
+    Media,
+    News,
     Submissions, // 記得加這個
-    Registrations // 還有這個
-  ], 
-  
+    Registrations, // 還有這個
+  ],
+
   // 4. 註冊所有的 Globals
   globals: [
-    Contact, 
-    Transport // 交通資訊放這裡
-  ], 
+    Contact,
+    Transport,
+    會場, // 交通資訊放這裡
+  ],
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

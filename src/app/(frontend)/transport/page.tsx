@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Bus, Car, MapPin, Train, Footprints } from 'lucide-react' // 需要安裝 lucide-react
-
+export const dynamic = 'force-dynamic'
 // --- 這裡定義各個積木的 UI 元件 (實際專案建議拆分到 components 資料夾) ---
 
 // 1. 文字積木元件
@@ -32,11 +32,16 @@ const TransportGridBlock = ({ data }: { data: any }) => {
   // 根據類型對應 icon
   const getIcon = (type: string) => {
     switch (type) {
-      case 'mrt': return <Train className="w-8 h-8 text-white" />
-      case 'bus': return <Bus className="w-8 h-8 text-white" />
-      case 'car': return <Car className="w-8 h-8 text-white" />
-      case 'walk': return <Footprints className="w-8 h-8 text-white" />
-      default: return <MapPin className="w-8 h-8 text-white" />
+      case 'mrt':
+        return <Train className="w-8 h-8 text-white" />
+      case 'bus':
+        return <Bus className="w-8 h-8 text-white" />
+      case 'car':
+        return <Car className="w-8 h-8 text-white" />
+      case 'walk':
+        return <Footprints className="w-8 h-8 text-white" />
+      default:
+        return <MapPin className="w-8 h-8 text-white" />
     }
   }
 
@@ -49,14 +54,15 @@ const TransportGridBlock = ({ data }: { data: any }) => {
       )}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.methods?.map((item: any, index: number) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-stone-100 hover:shadow-md hover:border-[#869D85] transition-all duration-300">
+          <div
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-sm border border-stone-100 hover:shadow-md hover:border-[#869D85] transition-all duration-300"
+          >
             <div className="w-14 h-14 bg-[#5F7161] rounded-full flex items-center justify-center mb-4 shadow-sm">
               {getIcon(item.type)}
             </div>
             <h3 className="text-xl font-bold text-stone-900 mb-2">{item.title}</h3>
-            <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">
-              {item.description}
-            </p>
+            <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{item.description}</p>
           </div>
         ))}
       </div>
