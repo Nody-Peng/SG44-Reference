@@ -68,7 +68,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
                     // 判斷是檔案還是連結
                     if (item.type === 'file' && item.file && typeof item.file === 'object') {
                       // 👇 修正 1: 改用 @ts-expect-error 消除警告
-                      // @ts-expect-error: Payload type checking workaround
+
                       const rawUrl = item.file.url
 
                       // 👇 修正 2: 強制檢查是否為字串，如果不是就給空字串
