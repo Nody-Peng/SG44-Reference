@@ -1,7 +1,6 @@
 export const revalidate = 20
 
 import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import Hero from '@/components/sections/home/Hero'
 import NewsSection from '@/components/sections/home/NewsSection'
 import TopicGrid from '@/components/sections/home/TopicGrid'

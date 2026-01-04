@@ -56,7 +56,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
               {news.content && <RichText data={news.content} />}
             </div>
 
-            {/* 👇 新增：附件下載與相關連結區域 */}
+            {/* 附件下載與相關連結區域 */}
             {news.relatedFiles && news.relatedFiles.length > 0 && (
               <div className="mt-12 p-6 bg-stone-50 rounded-xl border border-stone-200">
                 <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
@@ -67,8 +67,16 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
                   {news.relatedFiles.map((item, index) => {
                     // 判斷是檔案還是連結
                     if (item.type === 'file' && item.file && typeof item.file === 'object') {
-                      // @ts-ignore: Payload type checking workaround
-                      const fileUrl = item.file.url
+                      // 👇 修正 1: 改用 @ts-expect-error 消除警告
+                      // @ts-expect-error: Payload type checking workaround
+                      const rawUrl = item.file.url
+
+                      // 👇 修正 2: 強制檢查是否為字串，如果不是就給空字串
+                      const fileUrl = typeof rawUrl === 'string' ? rawUrl : ''
+
+                      // 如果網址是空的，就不渲染這個按鈕，避免錯誤
+                      if (!fileUrl) return null
+
                       return (
                         <li key={index}>
                           <a
@@ -111,7 +119,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
               </div>
             )}
 
-            {/* 底部大按鈕 (Action Button) */}
+            {/* 底部大按鈕 */}
             {news.actionLink && (
               <div className="mt-10 pt-8 border-t border-stone-100 flex justify-center md:justify-start">
                 <a
