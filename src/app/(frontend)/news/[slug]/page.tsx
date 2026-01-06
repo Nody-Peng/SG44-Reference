@@ -1,12 +1,11 @@
 // src/app/(frontend)/news/[slug]/page.tsx
+import type { Media } from '@/payload-types'
 import configPromise from '@payload-config'
-import { RichText } from '@payloadcms/richtext-lexical/react' // 如果你是用 Lexical (Payload 3.0 預設)
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
-// 如果你是用 Slate，請改用 import { RichText } from '@payloadcms/richtext-slate'
-// 或者如果你沒有安裝渲染器，可以暫時用 JSON.stringify 顯示
 
 // 預先生成靜態路徑 (Optional, 適合 SSG)
 export async function generateStaticParams() {
@@ -75,17 +74,10 @@ export default async function NewsPost({ params }: { params: Promise<{ slug: str
 
         {/* 主要內容區 */}
         <div className="prose prose-stone prose-lg max-w-none mb-16">
-          {/* 
-             注意：這裡假設你使用 Lexical Editor。
-             如果你的 content 欄位是 HTML string，請用 <div dangerouslySetInnerHTML={{ __html: news.content }} />
-           */}
-          {news.content && (
-            // @ts-ignore - 忽略型別檢查以確保通用性，實際專案請安裝對應的 renderer
-            <RichText data={news.content} />
-          )}
+          {news.content && <RichText data={news.content} />}
         </div>
 
-        {/* 附件與連結 (極簡風格，無 Icon) */}
+        {/* 附件與連結 */}
         {news.relatedFiles && news.relatedFiles.length > 0 && (
           <div className="mt-16 pt-8 border-t border-stone-100">
             <h3 className="text-sm font-bold text-stone-900 mb-4 uppercase tracking-widest">
@@ -96,9 +88,11 @@ export default async function NewsPost({ params }: { params: Promise<{ slug: str
                 let url = ''
                 let typeLabel = ''
 
-                if (item.type === 'file' && item.file && typeof item.file === 'object') {
-                  // @ts-expect-error Payload type check
-                  url = typeof item.file.url === 'string' ? item.file.url : ''
+                // ✅ 正確的型別檢查
+                if (item.type === 'file' && item.file) {
+                  // item.file 可能是 string (ID) 或 Media 物件
+                  const fileData = item.file as Media
+                  url = fileData.url || ''
                   typeLabel = '檔案下載'
                 } else if (item.type === 'link' && item.url) {
                   url = item.url
@@ -129,9 +123,9 @@ export default async function NewsPost({ params }: { params: Promise<{ slug: str
           </div>
         )}
 
-        {/* 底部行動呼籲按鈕 (如果有設定) */}
+        {/* 底部行動呼籲按鈕 */}
         {news.actionLink && (
-          <div className="text-center pt-8 border-t border-stone-100">
+          <div className="text-center pt-8 border-t border-stone-100 mt-12">
             <a
               href={news.actionLink}
               target="_blank"
