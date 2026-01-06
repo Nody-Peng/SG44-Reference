@@ -5,10 +5,20 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+// ✅ 定義型別
+interface SubMenuItem {
+  name: string
+  href: string
+}
+
+interface NavItem {
+  name: string
+  href: string
+  items?: SubMenuItem[] // 可選的子選單
+}
+
 // 定義導覽列資料結構
-// href: 連結路徑
-// items: 下拉選單內容 (如果有)
-const NAV_ITEMS = [
+const NAV_ITEMS: NavItem[] = [
   {
     name: '首頁',
     href: '/',
@@ -19,7 +29,7 @@ const NAV_ITEMS = [
   },
   // {
   //   name: '議程',
-  //   href: '/agenda', // 預設點擊主標題去議程大綱
+  //   href: '/agenda',
   //   items: [
   //     { name: '議程大綱', href: '/agenda' },
   //     { name: '專題演講', href: '/keynote' },
@@ -42,7 +52,7 @@ const NAV_ITEMS = [
   // },
   // {
   //   name: '論文發表',
-  //   href: '/submission', // 預設點擊去投稿說明
+  //   href: '/submission',
   //   items: [
   //     { name: '會議論文集', href: '/proceedings' },
   //     { name: '投稿說明', href: '/submission' },
@@ -83,7 +93,6 @@ const NAV_ITEMS = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  // 用來控制手機版下拉選單的展開狀態
   const [mobileSubMenuOpen, setMobileSubMenuOpen] = useState<number | null>(null)
 
   const pathname = usePathname()
@@ -96,7 +105,6 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // 切換頁面時關閉手機版選單
   useEffect(() => {
     setIsOpen(false)
     setMobileSubMenuOpen(null)
@@ -135,11 +143,10 @@ const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Menu (電腦版選單) */}
+          {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => (
               <div key={item.name} className="relative group px-3 py-2">
-                {/* 主選單項目 */}
                 <Link
                   href={item.href}
                   className="flex items-center gap-1 text-sm font-medium text-stone-600 hover:text-[#5F7161] transition-colors"
@@ -153,7 +160,7 @@ const Navbar: React.FC = () => {
                   )}
                 </Link>
 
-                {/* 下拉選單 (Dropdown) */}
+                {/* Dropdown */}
                 {item.items && (
                   <div className="absolute left-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2">
                     <div className="bg-white rounded-md shadow-lg border border-stone-100 overflow-hidden py-1">
@@ -171,20 +178,10 @@ const Navbar: React.FC = () => {
                 )}
               </div>
             ))}
-
-            {/* 登入/註冊按鈕 (電腦版) */}
-            {/* <Link
-              href="/auth"
-              className="ml-4 flex items-center gap-2 px-4 py-2 rounded-full bg-[#5F7161] text-white text-sm font-bold hover:bg-[#4a584b] transition-colors shadow-sm"
-            >
-              <UserCircle size={18} />
-              <span>登入 / 註冊</span>
-            </Link> */}
           </div>
 
-          {/* Mobile Menu Button (手機版漢堡按鈕) */}
+          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-4">
-            {/* 手機版只顯示簡單的登入圖示 */}
             <Link href="/auth" className="text-stone-600 hover:text-[#5F7161]">
               <UserCircle size={24} />
             </Link>
@@ -198,14 +195,13 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Panel (手機版側邊選單) */}
+      {/* Mobile Menu Panel */}
       {isOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white border-b border-stone-200 shadow-xl max-h-[80vh] overflow-y-auto">
           <div className="px-4 pt-2 pb-6 space-y-1">
             {NAV_ITEMS.map((item, index) => (
               <div key={item.name} className="border-b border-stone-100 last:border-0">
                 {item.items ? (
-                  // 有子選單的項目
                   <div>
                     <button
                       onClick={() => toggleMobileSubMenu(index)}
@@ -219,7 +215,6 @@ const Navbar: React.FC = () => {
                         }`}
                       />
                     </button>
-                    {/* 手機版子選單內容 */}
                     {mobileSubMenuOpen === index && (
                       <div className="bg-stone-50 px-4 py-2 space-y-2">
                         {item.items.map((subItem) => (
@@ -236,7 +231,6 @@ const Navbar: React.FC = () => {
                     )}
                   </div>
                 ) : (
-                  // 沒有子選單的項目 (直接連結)
                   <Link
                     href={item.href}
                     className="block px-3 py-3 text-stone-700 font-medium hover:text-[#5F7161]"
@@ -248,7 +242,6 @@ const Navbar: React.FC = () => {
               </div>
             ))}
 
-            {/* 手機版最底下的登入按鈕 (雖然上面有圖示，但選單內也可以放一個) */}
             <div className="pt-4">
               <Link
                 href="/auth"
