@@ -181,9 +181,13 @@ export interface News {
   id: number;
   title: string;
   /**
-   * 這會變成網址的一部分，例如 /news/call-for-papers
+   * 這會變成網址的一部分,例如 /news/call-for-papers
    */
   slug: string;
+  /**
+   * 勾選後會顯示在首頁最新消息區(最多3則)
+   */
+  showOnHomepage?: boolean | null;
   category: '重要公告' | '徵稿資訊' | '會議議程' | '註冊報名' | '榮譽榜單' | '一般消息';
   publishedDate: string;
   content: {
@@ -214,7 +218,7 @@ export interface News {
       }[]
     | null;
   /**
-   * 適合放最重要的行動呼籲，如「前往報名表單」
+   * 適合放最重要的行動呼籲,如「前往報名表單」
    */
   actionLink?: string | null;
   actionText?: string | null;
@@ -389,6 +393,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  showOnHomepage?: T;
   category?: T;
   publishedDate?: T;
   content?: T;

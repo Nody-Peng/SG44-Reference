@@ -12,72 +12,77 @@ const NAV_ITEMS = [
   {
     name: '首頁',
     href: '/',
+    items: [
+      { name: '會議資訊', href: '/#info' },
+      { name: '重要日程', href: '/#timeline' },
+      { name: '最新消息', href: '/#news-preview' },
+    ],
   },
   {
     name: '最新消息',
     href: '/news',
   },
-  // {
-  //   name: '議程',
-  //   href: '/agenda', // 預設點擊主標題去議程大綱
-  //   items: [
-  //     { name: '議程大綱', href: '/agenda' },
-  //     { name: '專題演講', href: '/keynote' },
-  //     { name: '細部議程', href: '/schedule' },
-  //     { name: '分組論文發表', href: '/sessions' },
-  //     { name: '海報發表', href: '/poster' },
-  //     { name: '特別論壇', href: '/forum' },
-  //     { name: '空間資訊永續應用獎', href: '/award' },
-  //   ],
-  // },
-  // {
-  //   name: '會議報名',
-  //   href: '/registration',
-  //   items: [
-  //     { name: '報名時程', href: '/registration#timeline' },
-  //     { name: '報名費用', href: '/registration#fees' },
-  //     { name: '報名方式', href: '/registration#method' },
-  //     { name: '報名須知', href: '/registration#notice' },
-  //   ],
-  // },
-  // {
-  //   name: '論文發表',
-  //   href: '/submission', // 預設點擊去投稿說明
-  //   items: [
-  //     { name: '會議論文集', href: '/proceedings' },
-  //     { name: '投稿說明', href: '/submission' },
-  //     { name: '發表注意事項', href: '/guidelines' },
-  //   ],
-  // },
-  // {
-  //   name: '大專生競賽',
-  //   href: '/competition-rules',
-  //   items: [
-  //     { name: '競賽細則', href: '/competition-rules' },
-  //     { name: '競賽流程', href: '/competition-schedule' },
-  //   ],
-  // },
-  // {
-  //   name: '參展贊助',
-  //   href: '/sponsors',
-  //   items: [
-  //     { name: '參展及贊助單位', href: '/sponsors' },
-  //     { name: '參展報名', href: '/exhibition' },
-  //     { name: '活動贊助', href: '/sponsorship' },
-  //   ],
-  // },
-  // {
-  //   name: '會議資訊',
-  //   href: '/about',
-  //   items: [
-  //     { name: '活動照片', href: '/gallery' },
-  //     { name: '會議介紹', href: '/about' },
-  //     { name: '會場地圖', href: '/venue' },
-  //     { name: '交通資訊', href: '/transportation' },
-  //     { name: '住宿資訊', href: '/hotels' },
-  //     { name: '聯絡我們', href: '/contact' },
-  //   ],
-  // },
+  {
+    name: '議程',
+    href: '/agenda', // 預設點擊主標題去議程大綱
+    items: [
+      { name: '議程大綱', href: '/agenda' },
+      { name: '專題演講', href: '/keynote' },
+      { name: '細部議程', href: '/schedule' },
+      { name: '分組論文發表', href: '/sessions' },
+      { name: '海報發表', href: '/poster' },
+      { name: '特別論壇', href: '/forum' },
+      { name: '空間資訊永續應用獎', href: '/award' },
+    ],
+  },
+  {
+    name: '會議報名',
+    href: '/registration',
+    items: [
+      { name: '報名時程', href: '/registration#timeline' },
+      { name: '報名費用', href: '/registration#fees' },
+      { name: '報名方式', href: '/registration#method' },
+      { name: '報名須知', href: '/registration#notice' },
+    ],
+  },
+  {
+    name: '論文發表',
+    href: '/submission', // 預設點擊去投稿說明
+    items: [
+      { name: '會議論文集', href: '/proceedings' },
+      { name: '投稿說明', href: '/submission' },
+      { name: '發表注意事項', href: '/guidelines' },
+    ],
+  },
+  {
+    name: '大專生競賽',
+    href: '/competition-rules',
+    items: [
+      { name: '競賽細則', href: '/competition-rules' },
+      { name: '競賽流程', href: '/competition-schedule' },
+    ],
+  },
+  {
+    name: '參展贊助',
+    href: '/sponsors',
+    items: [
+      { name: '參展及贊助單位', href: '/sponsors' },
+      { name: '參展報名', href: '/exhibition' },
+      { name: '活動贊助', href: '/sponsorship' },
+    ],
+  },
+  {
+    name: '會議資訊',
+    href: '/about',
+    items: [
+      { name: '活動照片', href: '/gallery' },
+      { name: '會議介紹', href: '/about' },
+      { name: '會場地圖', href: '/venue' },
+      { name: '交通資訊', href: '/transportation' },
+      { name: '住宿資訊', href: '/hotels' },
+      { name: '聯絡我們', href: '/contact' },
+    ],
+  },
 ]
 
 const Navbar: React.FC = () => {
@@ -130,7 +135,7 @@ const Navbar: React.FC = () => {
                 SG44
               </span>
               <span className="text-[10px] text-stone-500 font-medium tracking-wider uppercase">
-                第44屆測量及空間資訊研討會
+                測量及空間資訊研討會
               </span>
             </div>
           </Link>
@@ -173,13 +178,13 @@ const Navbar: React.FC = () => {
             ))}
 
             {/* 登入/註冊按鈕 (電腦版) */}
-            {/* <Link
+            <Link
               href="/auth"
               className="ml-4 flex items-center gap-2 px-4 py-2 rounded-full bg-[#5F7161] text-white text-sm font-bold hover:bg-[#4a584b] transition-colors shadow-sm"
             >
               <UserCircle size={18} />
               <span>登入 / 註冊</span>
-            </Link> */}
+            </Link>
           </div>
 
           {/* Mobile Menu Button (手機版漢堡按鈕) */}

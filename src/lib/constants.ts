@@ -102,11 +102,14 @@ export const NEWS_DATA: NewsItem[] = serverData?.news || [
 
 // 3. 重要時程
 export const TIMELINE_DATA: TimelineEvent[] = serverData?.timeline || [
-  { date: '114/12/30', title: '第一次籌備會議', isPast: false },
+  { date: '115/03/13', title: '徵求共同主辦及特別論壇主題截止', isPast: false },
   { date: '115/04/01', title: '公告及開放早鳥報名', isPast: false },
-  { date: '115/06/30', title: '文章投稿截止', isPast: false },
-  { date: '115/07/18', title: '論文審查結果公告', isPast: false },
-  { date: '115/08/20', title: 'SG44 研討會開幕', isPast: false },
+  { date: '115/06/15', title: '早鳥報名截止', isPast: false },
+  { date: '115/06/29', title: '文章摘要投稿截止', isPast: false },
+  { date: '115/07/10', title: '摘要審查結果公告及廠商報名參展截止', isPast: false },
+  { date: '115/07/17', title: '文章全文投稿截止', isPast: false },
+  { date: '115/07/24', title: '論文審查結果及議程安排公告', isPast: false },
+  { date: '115/08/20-21', title: 'SG44 研討會開幕', isPast: false },
 ]
 
 // 4. 徵稿主題

@@ -1,6 +1,5 @@
 'use client'
 import { CONFERENCE_INFO } from '@/lib/constants'
-import { Video } from 'lucide-react'
 import React from 'react'
 
 const Hero: React.FC = () => {
@@ -32,7 +31,7 @@ const Hero: React.FC = () => {
         </p>
 
         {/* CTA Button - 加入會議 */}
-        <div className="mt-12">
+        {/* <div className="mt-12">
           <a
             href="https://meet.google.com/jcq-owyh-wnt"
             target="_blank"
@@ -56,7 +55,7 @@ const Hero: React.FC = () => {
             </svg>
           </a>
           <p className="mt-4 text-sm text-stone-500">會議時間：114年12月30日（週二）下午14：00</p>
-        </div>
+        </div> */}
       </div>
     </section>
   )
